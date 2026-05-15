@@ -1,6 +1,7 @@
 import type { Scored } from "@/lib/places";
 import { motion } from "framer-motion";
-import { MapPin } from "lucide-react";
+import { MapPin, Star } from "lucide-react";
+import { averageRating } from "@/lib/reviews-store";
 
 const TAG_LABEL: Record<string, string> = {
   silencioso: "Silencioso",
@@ -16,6 +17,7 @@ const TAG_LABEL: Record<string, string> = {
 };
 
 export function PlaceCard({ place, onClick, index = 0 }: { place: Scored; onClick?: () => void; index?: number }) {
+  const rating = typeof window !== "undefined" ? averageRating(place.id) : { avg: 0, count: 0 };
   const calmShare = place.vibe === "calmante" ? place.score : 100 - place.score;
   return (
     <motion.button
