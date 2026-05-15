@@ -217,7 +217,7 @@ function BudgetStep({ data, update }: any) {
   );
 }
 
-
+function SightStep({ data, update }: any) {
   return (
     <>
       <Field label="¿Qué tipo de iluminación prefieres?">
