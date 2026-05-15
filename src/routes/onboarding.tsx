@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
-import { defaultProfile, useProfile, type SensoryProfile, type Mood, type Need } from "@/lib/profile-store";
+import { defaultProfile, useProfile, type SensoryProfile, type Mood, type Need, type Budget } from "@/lib/profile-store";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/onboarding")({
   component: Onboarding,
 });
 
-const STEPS = ["Sobre ti", "Vista", "Oído", "Olfato y entorno", "Cómo te sientes", "Tus lugares"] as const;
+const STEPS = ["Sobre ti", "Presupuesto", "Vista", "Oído", "Olfato y entorno", "Cómo te sientes", "Tus lugares"] as const;
 
 function Onboarding() {
   const { profile, save } = useProfile();
@@ -56,11 +56,12 @@ function Onboarding() {
             className="mt-8 space-y-6"
           >
             {step === 0 && <BasicStep data={data} update={update} />}
-            {step === 1 && <SightStep data={data} update={update} />}
-            {step === 2 && <HearingStep data={data} update={update} />}
-            {step === 3 && <ScentStep data={data} update={update} />}
-            {step === 4 && <EmotionStep data={data} update={update} />}
-            {step === 5 && <FavoritesStep data={data} update={update} />}
+            {step === 1 && <BudgetStep data={data} update={update} />}
+            {step === 2 && <SightStep data={data} update={update} />}
+            {step === 3 && <HearingStep data={data} update={update} />}
+            {step === 4 && <ScentStep data={data} update={update} />}
+            {step === 5 && <EmotionStep data={data} update={update} />}
+            {step === 6 && <FavoritesStep data={data} update={update} />}
           </motion.div>
         </AnimatePresence>
 
