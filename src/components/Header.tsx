@@ -9,6 +9,7 @@ export function Header() {
     { to: "/dashboard", label: "Mapa" },
     { to: "/onboarding", label: "Mi perfil" },
     { to: "/contribute", label: "Colaborar" },
+    { to: "/feedback", label: "Opinión" },
   ] as const;
 
   return (

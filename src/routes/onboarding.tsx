@@ -169,7 +169,55 @@ function BasicStep({ data, update }: any) {
   );
 }
 
-function SightStep({ data, update }: any) {
+function BudgetStep({ data, update }: any) {
+  const options: { v: Budget; label: string; hint: string }[] = [
+    { v: "bajo", label: "Bajo", hint: "Lugares gratuitos o económicos" },
+    { v: "medio", label: "Medio", hint: "Cafés, restaurantes accesibles" },
+    { v: "alto", label: "Alto", hint: "Sin restricciones de precio" },
+  ];
+  return (
+    <>
+      <Field label="¿Cuál es tu presupuesto disponible?">
+        <div className="grid grid-cols-3 gap-2">
+          {options.map((o) => {
+            const active = data.budget === o.v;
+            return (
+              <button
+                key={o.v}
+                type="button"
+                onClick={() => update("budget", o.v)}
+                className={`text-left rounded-2xl border p-4 transition ${
+                  active
+                    ? "bg-primary/10 border-primary shadow-md shadow-primary/10"
+                    : "bg-card border-border hover:bg-mist"
+                }`}
+              >
+                <div className="font-display text-lg">{o.label}</div>
+                <div className="text-xs text-muted-foreground mt-1">{o.hint}</div>
+              </button>
+            );
+          })}
+        </div>
+      </Field>
+      <Field label={`Gasto aproximado por visita: ${data.spendApprox ?? 0}`}>
+        <input
+          type="range"
+          min={0}
+          max={80}
+          step={5}
+          value={data.spendApprox ?? 0}
+          onChange={(e) => update("spendApprox", Number(e.target.value))}
+          className="w-full accent-primary"
+        />
+        <div className="flex justify-between text-xs text-muted-foreground mt-1">
+          <span>Gratis</span><span>$$$</span>
+        </div>
+      </Field>
+    </>
+  );
+}
+
+
   return (
     <>
       <Field label="¿Qué tipo de iluminación prefieres?">
