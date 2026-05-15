@@ -48,7 +48,15 @@ export function PlaceCard({ place, onClick, index = 0 }: { place: Scored; onClic
       </div>
 
       <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-        <span className="inline-flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{place.distanceKm.toFixed(1)} km</span>
+        <span className="inline-flex items-center gap-2">
+          <span className="inline-flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{place.distanceKm.toFixed(1)} km</span>
+          <span className="text-foreground/70">{"$".repeat(place.priceLevel)}</span>
+          {rating.count > 0 && (
+            <span className="inline-flex items-center gap-0.5 text-foreground/70">
+              <Star className="w-3.5 h-3.5 fill-primary text-primary" />{rating.avg.toFixed(1)}
+            </span>
+          )}
+        </span>
         <div className="flex items-center gap-2">
           <div className="w-24 h-1.5 rounded-full bg-muted overflow-hidden">
             <div
