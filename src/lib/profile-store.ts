@@ -5,19 +5,22 @@ export type Mood =
   | "desmotivado" | "saturado" | "feliz" | "concentracion";
 
 export type Need = "calmarme" | "estimularme";
+export type Budget = "bajo" | "medio" | "alto";
 
 export interface SensoryProfile {
   name: string;
   age?: number;
   city?: string;
-  noiseTolerance: 1 | 2 | 3 | 4 | 5; // 1 muy silencioso - 5 muy ruidoso ok
+  budget: Budget;
+  spendApprox?: number; // monedas locales aproximadas por visita
+  noiseTolerance: 1 | 2 | 3 | 4 | 5;
   lighting: "tenue" | "natural" | "brillante" | "calida" | "fria";
   scents: string[];
-  scentSensitivity: number; // 1-5
+  scentSensitivity: number;
   crowd: "muy-pocas" | "moderado" | "social" | "concurrido";
   weather: "fresco" | "templado" | "calido";
   need: Need;
-  energy: number; // 1-10
+  energy: number;
   mood: Mood;
   favorites: string[];
 }
@@ -26,6 +29,9 @@ const KEY = "calmpath:profile";
 
 export const defaultProfile: SensoryProfile = {
   name: "",
+  age: undefined,
+  budget: "medio",
+  spendApprox: 15,
   noiseTolerance: 2,
   lighting: "tenue",
   scents: ["naturaleza"],
@@ -45,7 +51,11 @@ export function useProfile() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(KEY);
-      if (raw) setProfile(JSON.parse(raw));
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        // backfill defaults for older profiles
+        setProfile({ ...defaultProfile, ...parsed });
+      }
     } catch {}
     setLoaded(true);
   }, []);

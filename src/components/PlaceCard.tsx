@@ -1,6 +1,7 @@
 import type { Scored } from "@/lib/places";
 import { motion } from "framer-motion";
-import { MapPin } from "lucide-react";
+import { MapPin, Star } from "lucide-react";
+import { averageRating } from "@/lib/reviews-store";
 
 const TAG_LABEL: Record<string, string> = {
   silencioso: "Silencioso",
@@ -16,6 +17,7 @@ const TAG_LABEL: Record<string, string> = {
 };
 
 export function PlaceCard({ place, onClick, index = 0 }: { place: Scored; onClick?: () => void; index?: number }) {
+  const rating = typeof window !== "undefined" ? averageRating(place.id) : { avg: 0, count: 0 };
   const calmShare = place.vibe === "calmante" ? place.score : 100 - place.score;
   return (
     <motion.button
@@ -46,7 +48,15 @@ export function PlaceCard({ place, onClick, index = 0 }: { place: Scored; onClic
       </div>
 
       <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-        <span className="inline-flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{place.distanceKm.toFixed(1)} km</span>
+        <span className="inline-flex items-center gap-2">
+          <span className="inline-flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{place.distanceKm.toFixed(1)} km</span>
+          <span className="text-foreground/70">{"$".repeat(place.priceLevel)}</span>
+          {rating.count > 0 && (
+            <span className="inline-flex items-center gap-0.5 text-foreground/70">
+              <Star className="w-3.5 h-3.5 fill-primary text-primary" />{rating.avg.toFixed(1)}
+            </span>
+          )}
+        </span>
         <div className="flex items-center gap-2">
           <div className="w-24 h-1.5 rounded-full bg-muted overflow-hidden">
             <div

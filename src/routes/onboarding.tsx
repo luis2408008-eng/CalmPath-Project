@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
-import { defaultProfile, useProfile, type SensoryProfile, type Mood, type Need } from "@/lib/profile-store";
+import { defaultProfile, useProfile, type SensoryProfile, type Mood, type Need, type Budget } from "@/lib/profile-store";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/onboarding")({
   component: Onboarding,
 });
 
-const STEPS = ["Sobre ti", "Vista", "Oído", "Olfato y entorno", "Cómo te sientes", "Tus lugares"] as const;
+const STEPS = ["Sobre ti", "Presupuesto", "Vista", "Oído", "Olfato y entorno", "Cómo te sientes", "Tus lugares"] as const;
 
 function Onboarding() {
   const { profile, save } = useProfile();
@@ -56,11 +56,12 @@ function Onboarding() {
             className="mt-8 space-y-6"
           >
             {step === 0 && <BasicStep data={data} update={update} />}
-            {step === 1 && <SightStep data={data} update={update} />}
-            {step === 2 && <HearingStep data={data} update={update} />}
-            {step === 3 && <ScentStep data={data} update={update} />}
-            {step === 4 && <EmotionStep data={data} update={update} />}
-            {step === 5 && <FavoritesStep data={data} update={update} />}
+            {step === 1 && <BudgetStep data={data} update={update} />}
+            {step === 2 && <SightStep data={data} update={update} />}
+            {step === 3 && <HearingStep data={data} update={update} />}
+            {step === 4 && <ScentStep data={data} update={update} />}
+            {step === 5 && <EmotionStep data={data} update={update} />}
+            {step === 6 && <FavoritesStep data={data} update={update} />}
           </motion.div>
         </AnimatePresence>
 
@@ -164,6 +165,54 @@ function BasicStep({ data, update }: any) {
             className="w-full bg-card border border-border rounded-2xl px-4 py-3 outline-none focus:border-primary transition" />
         </Field>
       </div>
+    </>
+  );
+}
+
+function BudgetStep({ data, update }: any) {
+  const options: { v: Budget; label: string; hint: string }[] = [
+    { v: "bajo", label: "Bajo", hint: "Lugares gratuitos o económicos" },
+    { v: "medio", label: "Medio", hint: "Cafés, restaurantes accesibles" },
+    { v: "alto", label: "Alto", hint: "Sin restricciones de precio" },
+  ];
+  return (
+    <>
+      <Field label="¿Cuál es tu presupuesto disponible?">
+        <div className="grid grid-cols-3 gap-2">
+          {options.map((o) => {
+            const active = data.budget === o.v;
+            return (
+              <button
+                key={o.v}
+                type="button"
+                onClick={() => update("budget", o.v)}
+                className={`text-left rounded-2xl border p-4 transition ${
+                  active
+                    ? "bg-primary/10 border-primary shadow-md shadow-primary/10"
+                    : "bg-card border-border hover:bg-mist"
+                }`}
+              >
+                <div className="font-display text-lg">{o.label}</div>
+                <div className="text-xs text-muted-foreground mt-1">{o.hint}</div>
+              </button>
+            );
+          })}
+        </div>
+      </Field>
+      <Field label={`Gasto aproximado por visita: ${data.spendApprox ?? 0}`}>
+        <input
+          type="range"
+          min={0}
+          max={80}
+          step={5}
+          value={data.spendApprox ?? 0}
+          onChange={(e) => update("spendApprox", Number(e.target.value))}
+          className="w-full accent-primary"
+        />
+        <div className="flex justify-between text-xs text-muted-foreground mt-1">
+          <span>Gratis</span><span>$$$</span>
+        </div>
+      </Field>
     </>
   );
 }
